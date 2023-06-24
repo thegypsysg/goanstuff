@@ -383,7 +383,9 @@ export default {
       const cardRect = cardSection.getBoundingClientRect();
       const scrollTop =
         window.pageYOffset || document.documentElement.scrollTop;
-      const offset = cardRect.top + scrollTop - 350; // Nilai offset yang diinginkan, dalam piksel
+      const offset = this.isSmall
+        ? cardRect.top + scrollTop - 300
+        : cardRect.top + scrollTop - 240; // Nilai offset yang diinginkan, dalam piksel
 
       window.scrollTo({
         top: offset,

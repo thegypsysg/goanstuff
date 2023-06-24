@@ -357,20 +357,12 @@ export default {
     ...mapState(['activeTag']),
     trendingBtn() {
       return [
-        {
-          title: 'View All',
-        },
-        { title: 'Whisky', tag: 'Whisky' },
-        { title: 'Gin', tag: 'Gin' },
-        { title: 'Beer', tag: 'Beer' },
-        {
-          title: 'Wine',
-          tag: 'Wine',
-        },
-        {
-          title: 'Single Malt',
-          tag: 'Single Malt',
-        },
+        { title: 'Sausages', tag: 'Sausages' },
+        { title: 'Pickles', tag: 'Pickles' },
+        { title: 'Cashew Nuts', tag: 'Cashew Nuts' },
+        { title: 'Masala', tag: 'Masala' },
+        { title: 'Vinegar', tag: 'Vinegar' },
+        { title: 'Dried Fish', tag: 'Dried Fish' },
       ];
     },
   },

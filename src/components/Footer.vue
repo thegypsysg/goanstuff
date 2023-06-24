@@ -147,7 +147,7 @@
         <v-row>
           <v-col>
             <a
-              href="javascript:void(0)"
+              @click="goToTrending"
               style="
                 color: #fa2964;
                 font-size: 14px;
@@ -225,6 +225,7 @@
 </template>
 
 <script>
+import app from '@/util/eventBus';
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Footer',
@@ -248,6 +249,9 @@ export default {
   methods: {
     handleResize() {
       this.screenWidth = window.innerWidth;
+    },
+    goToTrending() {
+      app.config.globalProperties.$eventBus.$emit('scrollToCardSection');
     },
   },
 };
