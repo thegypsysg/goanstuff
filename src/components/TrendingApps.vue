@@ -8,11 +8,17 @@
       <h1
         align="center"
         class="header-title mb-n10"
-        style="font-size: 56px; font-style: normal; font-weight: 700"
+        :class="{ 'mt-n4 mb-n8': !isSmall }"
+        style="
+          font-size: 56px;
+          font-style: normal;
+          font-weight: 700;
+          color: #7f7f7f !important;
+        "
       >
-        OUR BOOZE
+        Trending Goan Items
       </h1>
-      <div class="line-divider mt-10 mx-auto" />
+      <!-- <div class="line-divider mt-10 mx-auto" /> -->
       <!-- <p class="header-title-sub" style="margin-top: 32px">
         The gypsy Trending Web Apps
       </p> -->
@@ -54,7 +60,7 @@
         </template>
         <template #next="{ on, attrs }">
           <v-btn
-            v-if="activeIndex + 1 <= trendingBtn.length / 4"
+            v-if="activeIndex + 1 <= trendingBtn.length / 3"
             color="#0596d5"
             rounded
             size="40"
@@ -108,8 +114,10 @@
           >
             <v-lazy :options="{ threshold: 0.5 }" min-height="200">
               <div class="trending__app d-flex justify-center mb-8">
-                <div class="title-card title-card-mobile mx-auto">
-                  <h1>{{ card.title }}</h1>
+                <div
+                  class="title-card title-card-mobile mx-auto text-center py-2 px-1"
+                >
+                  <h1 style="line-height: 25px">{{ card.title }}</h1>
                 </div>
                 <v-card
                   style="
@@ -117,7 +125,7 @@
                     border-radius: 0px;
                   "
                 >
-                  <div class="img-cont">
+                  <div>
                     <div class="cart clearfix animate-effect">
                       <div class="action">
                         <div class="card-desc-cont-mobile px-2 text-center">
@@ -173,12 +181,14 @@
             cols="12"
             class="card"
           >
-            <v-lazy :options="{ threshold: 0.5 }" min-height="200">
+            <v-lazy :options="{ threshold: 0.5 }" min-height="250">
               <div class="trending__app d-flex justify-center mb-8">
                 <div class="title-card mx-auto">
                   <h1>{{ card.title }}</h1>
                 </div>
                 <v-card
+                  height="250"
+                  width="350"
                   style="
                     box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.15);
                     border-radius: 10px;
@@ -270,34 +280,34 @@ export default {
       // ],
       trendingCard: [
         {
-          img: require('@/assets/image/single.jpg'),
-          title: 'Single Malt',
-          desc: 'Singleton, Talisker, Glenlivet, Laphroaig, Glenfarclas and More...',
+          img: require('@/assets/image/card-1.jpg'),
+          title: 'Goa Sausages',
+          tag: 'Sausages',
         },
         {
-          img: require('@/assets/image/whiskeybanner.jpg'),
-          title: 'Whisky',
-          desc: 'Chivas Regal , Monkey Shoulder, Johnnie Walker, Glenfiddich and more ....',
+          img: require('@/assets/image/card-2.jpg'),
+          title: 'Cashew Nuts',
+          tag: 'Cashew Nuts',
         },
         {
-          img: require('@/assets/image/gin.jpg'),
-          title: 'Gin',
-          desc: "Roku, Hendrick's , Gordon's , Beefeater, Bombay Sapphire, Tanqueray and More...",
+          img: require('@/assets/image/card-3.jpg'),
+          title: 'Pickles',
+          tag: 'Pickles',
         },
         {
-          img: require('@/assets/image/single.jpg'),
-          title: 'Single Malt',
-          desc: 'Singleton, Talisker, Glenlivet, Laphroaig, Glenfarclas and More...',
+          img: require('@/assets/image/card-2.jpg'),
+          title: 'Cashew Nuts',
+          tag: 'Cashew Nuts',
         },
         {
-          img: require('@/assets/image/whiskeybanner.jpg'),
-          title: 'Whisky',
-          desc: 'Chivas Regal , Monkey Shoulder, Johnnie Walker, Glenfiddich and more ....',
+          img: require('@/assets/image/card-5.jpg'),
+          title: 'Dried Fish',
+          tag: 'Dried Fish',
         },
         {
-          img: require('@/assets/image/gin.jpg'),
-          title: 'Gin',
-          desc: "Roku, Hendrick's , Gordon's , Beefeater, Bombay Sapphire, Tanqueray and More...",
+          img: require('@/assets/image/card-1.jpg'),
+          title: 'Goa Sausages',
+          tag: 'Sausages',
         },
       ],
       // filteredCards: [],
@@ -311,17 +321,12 @@ export default {
 
     trendingBtn() {
       return [
-        { title: 'Promo App', tag: 'Promo App' },
-        { title: 'Alcohol App', tag: 'Alcohol App' },
-        { title: 'Jobs App', tag: 'Job App' },
-        { title: 'On The Run Apps', tag: 'On the Run App' },
-        { title: 'Housing App', tag: 'Housing App' },
-        { title: 'Travel App', tag: 'Travel App' },
-        { title: 'Staycation App', tag: 'Staycation App' },
-        { title: 'Listings App', tag: 'Listing App' },
-        { title: 'Tournaments App', tag: 'Tournament App' },
-        { title: 'Cafe App', tag: 'Cafe App' },
-        { title: 'Overseas Study App', tag: 'Overseas Study App' },
+        { title: 'Sausages', tag: 'Sausages' },
+        { title: 'Pickles', tag: 'Pickles' },
+        { title: 'Cashew Nuts', tag: 'Cashew Nuts' },
+        { title: 'Masala', tag: 'Masala' },
+        { title: 'Vinegar', tag: 'Vinegar' },
+        { title: 'Dried Fish', tag: 'Dried Fish' },
       ];
     },
     isSmall() {
@@ -439,7 +444,7 @@ export default {
 }
 .title-card-mobile {
   width: 90%;
-  font-size: 12px !important;
+  font-size: 10px !important;
 }
 
 .card-desc-cont h2 {
@@ -483,10 +488,16 @@ export default {
   transform: scale(0.8);
 }
 
+.img-cont {
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+}
+
 .img-item {
   transition: all 0.3s;
-  width: 100%;
-  height: auto;
+  min-width: 100%;
+  min-height: 100%;
   transform: scale(1);
 }
 
