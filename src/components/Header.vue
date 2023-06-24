@@ -33,7 +33,7 @@
         class="form-control mr-sm-2"
         type="text"
         style="font-style: italic"
-        placeholder="Type your brands... Chivas , Monkey , Roku , Glennfidich"
+        placeholder="Sausages, Cashew Nuts , Pickles , Masala, Vinegar"
         aria-label="Search"
         data-autocompleturl="https://boozards.com/merchant-product/search"
       />
@@ -130,7 +130,7 @@
             id="product_name"
             class="form-control mr-sm-2"
             type="text"
-            placeholder="Type your brands... Chivas , Monkey , Roku , Glennfidich"
+            placeholder="Sausages, Cashew Nuts , Pickles , Masala, Vinegar"
             aria-label="Search"
             data-autocompleturl="https://boozards.com/merchant-product/search"
           />

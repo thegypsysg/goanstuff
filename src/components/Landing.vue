@@ -2,16 +2,16 @@
   <div>
     <Banner />
     <TrendingApps />
-    <CountrySelections />
-    <OurBrands />
+    <!-- <CountrySelections /> -->
+    <!-- <OurBrands /> -->
   </div>
 </template>
 
 <script setup>
 import Banner from '@/components/Banner.vue';
-import CountrySelections from './CountrySelections.vue';
+// import CountrySelections from './CountrySelections.vue';
 import TrendingApps from './TrendingApps.vue';
-import OurBrands from './OurBrands.vue';
+// import OurBrands from './OurBrands.vue';
 </script>
 
 <script>
@@ -22,7 +22,11 @@ export default {
       drawer: false,
     };
   },
-  components: { TrendingApps, CountrySelections, OurBrands },
+  components: {
+    TrendingApps,
+    // CountrySelections,
+    // OurBrands
+  },
 };
 </script>
 

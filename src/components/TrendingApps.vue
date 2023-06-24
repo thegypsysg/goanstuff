@@ -20,6 +20,81 @@
   </v-container>
 
   <v-container id="trending" class="wrapper-box">
+    <div class="d-flex mx-6 mb-8">
+      <v-btn
+        v-if="!isSmall"
+        class="sub-menu-btn view-all"
+        :size="isSmall ? 30 : 120"
+        :class="{
+          active: isSelected,
+        }"
+        style="box-shadow: 0 5px 25px rgba(0, 0, 0, 0)"
+        @click="filterCards('')"
+      >
+        <p style="font-size: 12px" elevation>View All</p>
+      </v-btn>
+      <v-slide-group
+        v-if="!isSmall"
+        v-model="selectedTag"
+        class="trending-slide my-slide"
+      >
+        <template #prev="{ on, attrs }">
+          <v-btn
+            v-if="activeIndex > 1"
+            color="#0596d5"
+            rounded
+            icon
+            size="40"
+            v-bind="attrs"
+            v-on="on"
+            @click="previousSlide"
+          >
+            <v-icon size="20" color="white"> mdi-arrow-left </v-icon>
+          </v-btn>
+        </template>
+        <template #next="{ on, attrs }">
+          <v-btn
+            v-if="activeIndex + 1 <= trendingBtn.length / 4"
+            color="#0596d5"
+            rounded
+            size="40"
+            icon
+            v-bind="attrs"
+            @click="nextSlide"
+            v-on="on"
+          >
+            <v-icon size="20" color="white"> mdi-arrow-right </v-icon>
+          </v-btn>
+        </template>
+        <v-slide-group-item
+          v-for="btn in trendingBtn"
+          :key="btn.tag"
+          v-slot="{ isSelected, toggle }"
+          :value="btn.tag"
+          class="my-slide-item"
+          @click="filterCards(btn.tag)"
+        >
+          <v-btn
+            class="sub-menu-btn"
+            :size="isSmall ? 30 : 155"
+            :class="{
+              active: isSelected,
+              'py-4 mx-2': !isSmall,
+            }"
+            style="box-shadow: 0 5px 25px rgba(0, 0, 0, 0)"
+            @click="toggle"
+          >
+            <p style="font-size: 12px" elevation>
+              {{ btn.title }}
+              <span>{{
+                countCards(btn.tag) == 0 ? '' : `(${countCards(btn.tag)})`
+              }}</span>
+            </p>
+            <!-- <span class="badge" :class="isSelected ? 'active' : ''">2.7K</span> -->
+          </v-btn>
+        </v-slide-group-item>
+      </v-slide-group>
+    </div>
     <template v-if="isSmall">
       <v-row class="trending__app__wrapper">
         <transition-group name="card-transition" mode="out-in">
@@ -150,20 +225,18 @@
         </transition-group>
       </v-row>
     </template>
-    <div
+    <!-- <div
       class="card-footer d-flex justify-center align-center"
       :class="{ 'mt-16 mb-10': !isSmall, 'my-4': isSmall }"
       style="gap: 10px"
     >
-      <!-- <div class="line-divider" /> -->
       <v-btn
         class="btn-section btn-primary v-btn v-btn--has-bg theme--light elevation-0 text-white d-flex align-center py-8 px-16"
         :class="{ 'btn-section-2': isSmall }"
       >
         <span>VIEW ALL OUR BOOZE</span>
       </v-btn>
-      <!-- <div class="line-divider" /> -->
-    </div>
+    </div> -->
   </v-container>
 </template>
 

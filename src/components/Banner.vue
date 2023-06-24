@@ -20,7 +20,7 @@
               style="color: #fff; font-family: 'Oswald', sans-serif !important"
               :style="{ 'font-size': !isSmall ? '56px' : '46px' }"
             >
-              WHATS YOUR BRAND. ?
+              Looking for Goan Food. ?
             </h2>
             <!-- <h1
               style="color: rgb(255, 236, 75)"
@@ -42,7 +42,7 @@
               elevation="2"
               @click="scrollToTrending"
             >
-              <span class="mr-4">VIEW PRICE LIST</span>
+              <span class="mr-4">View Prices</span>
             </v-btn>
           </div>
         </v-col>
