@@ -50,7 +50,8 @@
             color="#0596d5"
             rounded
             icon
-            size="40"
+            style="height: 50px !important"
+            :size="isSmall ? 30 : 120"
             v-bind="attrs"
             v-on="on"
             @click="previousSlide"

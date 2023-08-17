@@ -296,12 +296,12 @@ export default {
     //   // eventBus.emit("filter-card-header", tag);
     // },
     getAppDetails2() {
-      // this.isLoading = true;
+      this.isLoading = true;
       axios
         .get(`/categories/active-website/app/${this.$appId}`)
         .then((response) => {
           const data = response.data.data;
-          console.log(data);
+          // console.log(data);
 
           this.trendingCard = data.map((item, index) => {
             return {
@@ -332,10 +332,10 @@ export default {
         .catch((error) => {
           // eslint-disable-next-line
           console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
         });
-      // .finally(() => {
-      //   this.isLoading = false;
-      // });
     },
 
     getLogo() {
