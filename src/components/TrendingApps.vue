@@ -132,6 +132,7 @@
                           <h2>{{ card.title }}</h2>
                           <p>{{ card.desc }}</p>
                           <v-btn
+                            :to="`/${card.path}`"
                             elevation="4"
                             style="
                               background-color: #ffa42e;
@@ -201,6 +202,7 @@
                           <h2>{{ card.title }}</h2>
                           <p>{{ card.desc }}</p>
                           <v-btn
+                            :to="`/${card.path}`"
                             elevation="4"
                             style="
                               background-color: #ffa42e;
@@ -258,59 +260,10 @@ import { mapState } from 'vuex';
 
 export default {
   name: 'TrendingApps',
+  props: ['trendingCard', 'trendingBtn'],
   data() {
     return {
       selectedTag: null,
-      // activeTagHeader: null,
-      // trendingBtn: [
-      //   {
-      //     title: "View All",
-      //   },
-      //   { title: "Promo App", tag: "Promo App" },
-      //   { title: "Alcohol App", tag: "Alcohol App" },
-      //   { title: "Jobs App", tag: "Job App" },
-      //   { title: "On The Run Apps", tag: "On the Run App" },
-      //   { title: "Housing App", tag: "Housing App" },
-      //   { title: "Travel App", tag: "Travel App" },
-      //   { title: "Staycation App", tag: "Staycation App" },
-      //   { title: "Listings App", tag: "Listing App" },
-      //   { title: "Tournaments App", tag: "Tournament App" },
-      //   { title: "Cafe App", tag: "Cafe App" },
-      //   { title: "Overseas Study App", tag: "Overseas Study App" },
-      // ],
-      trendingCard: [
-        {
-          img: require('@/assets/image/card-1.jpg'),
-          title: 'Goa Sausages',
-          tag: 'Sausages',
-        },
-        {
-          img: require('@/assets/image/card-2.jpg'),
-          title: 'Cashew Nuts',
-          tag: 'Cashew Nuts',
-        },
-        {
-          img: require('@/assets/image/card-3.jpg'),
-          title: 'Pickles',
-          tag: 'Pickles',
-        },
-        {
-          img: require('@/assets/image/card-2.jpg'),
-          title: 'Cashew Nuts',
-          tag: 'Cashew Nuts',
-        },
-        {
-          img: require('@/assets/image/card-5.jpg'),
-          title: 'Dried Fish',
-          tag: 'Dried Fish',
-        },
-        {
-          img: require('@/assets/image/card-1.jpg'),
-          title: 'Goa Sausages',
-          tag: 'Sausages',
-        },
-      ],
-      // filteredCards: [],
       selectedType: 0,
       activeIndex: 1,
       screenWidth: window.innerWidth,
@@ -318,17 +271,6 @@ export default {
   },
   computed: {
     ...mapState(['activeTag']),
-
-    trendingBtn() {
-      return [
-        { title: 'Sausages', tag: 'Sausages' },
-        { title: 'Pickles', tag: 'Pickles' },
-        { title: 'Cashew Nuts', tag: 'Cashew Nuts' },
-        { title: 'Masala', tag: 'Masala' },
-        { title: 'Vinegar', tag: 'Vinegar' },
-        { title: 'Dried Fish', tag: 'Dried Fish' },
-      ];
-    },
     isSmall() {
       return this.screenWidth < 640;
     },
@@ -363,11 +305,19 @@ export default {
       'scrollToCardSection',
       this.scrollToCardSection
     );
+    app.config.globalProperties.$eventBus.$on(
+      'scrollToTrendingSection',
+      this.scrollToTrendingSection
+    );
   },
   beforeUnmount() {
     app.config.globalProperties.$eventBus.$off(
       'scrollToCardSection',
       this.scrollToCardSection
+    );
+    app.config.globalProperties.$eventBus.$off(
+      'scrollToTrendingSection',
+      this.scrollToTrendingSection
     );
     // eventBus.off("filter-card-header", this.filterCards);
   },
@@ -384,8 +334,23 @@ export default {
       const scrollTop =
         window.pageYOffset || document.documentElement.scrollTop;
       const offset = this.isSmall
-        ? cardRect.top + scrollTop - 300
+        ? cardRect.top + scrollTop - 320
         : cardRect.top + scrollTop - 240; // Nilai offset yang diinginkan, dalam piksel
+
+      window.scrollTo({
+        top: offset,
+        behavior: 'smooth',
+      });
+      // window.scrollBy(0, -scrollOffset);
+    },
+    scrollToTrendingSection() {
+      const cardSection = document.getElementById('trending');
+      const cardRect = cardSection.getBoundingClientRect();
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+      const offset = this.isSmall
+        ? cardRect.top + scrollTop - 330
+        : cardRect.top + scrollTop - 230; // Nilai offset yang diinginkan, dalam piksel
 
       window.scrollTo({
         top: offset,

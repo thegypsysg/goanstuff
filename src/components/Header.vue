@@ -12,7 +12,7 @@
       <div class="logo-img-container d-flex align-center">
         <v-img
           class="logo-img"
-          src="@/assets/image/logo.png"
+          :src="$fileURL + logo"
           height="50"
           :class="{ 'ml-8': isWelcome }"
         >
@@ -60,10 +60,10 @@
         </template>
         <v-list>
           <v-list-item
-            v-for="(item, index) in items"
+            v-for="(item, index) in country"
             :key="index"
             :value="index"
-            @click="itemSelected = item.title"
+            @click="changeItemSelected(item.title)"
           >
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
@@ -74,7 +74,7 @@
       Sign up / Register
     </v-btn>
     <div v-if="!isSmall" class="cart d-flex align-center">
-      <div class="cart-line mr-2" />
+      <div class="cart-line mx-2" />
       <v-icon size="35" color="black"> mdi mdi-cart-variant </v-icon>
       <span>S$ 0</span>
     </div>
@@ -112,10 +112,10 @@
             </template>
             <v-list>
               <v-list-item
-                v-for="(item, index) in items"
+                v-for="(item, index) in country"
                 :key="index"
                 :value="index"
-                @click="itemSelected = item.title"
+                @click="changeItemSelected(item.title)"
               >
                 <v-list-item-title>{{ item.title }}</v-list-item-title>
               </v-list-item>
@@ -155,13 +155,12 @@
           </v-btn>
           <v-slide-group v-model="activeTag">
             <v-slide-group-item
-              v-for="(btn, index) in trendingBtn"
+              v-for="btn in trendingBtn"
               :key="btn.tag"
               v-slot="{ isSelected }"
               :value="btn.tag"
             >
               <v-btn
-                v-if="index !== 0 && btn.title != 'View All'"
                 class="sub-menu-btn"
                 :class="{
                   active: isSelected,
@@ -213,6 +212,7 @@
 <script>
 import { mapState, mapMutations } from 'vuex';
 import app from '@/util/eventBus';
+import axios from '@/util/axios';
 
 // import eventBus from "@/util/eventBus";
 // import eventBus from "@/util/eventBus";
@@ -224,7 +224,7 @@ export default {
   data() {
     return {
       // selectedTag: null,
-      // trendingBtn: [
+      trendingBtn: [],
       //   {
       //     title: "View All",
       //   },
@@ -241,106 +241,15 @@ export default {
       //   { title: "Overseas Study App", tag: "Overseas Study App" },
       // ],
       drawer: false,
-      itemSelected: 'Singapore',
-      items: [
+      logo: '',
+      country: [
         { title: 'Singapore', path: '#' },
         { title: 'Mumbai', path: '#' },
         { title: 'Goa', path: '#' },
         { title: 'Kuala Lumpur', path: '#' },
       ],
 
-      trendingCard: [
-        {
-          img: 'assets/gypsy-1.png',
-          title: 'Mall-e',
-          desc: 'Promotions Happening in Malls',
-          tag: 'Promo App',
-        },
-        {
-          img: 'assets/gypsy-2.png',
-          title: 'Boozards',
-          desc: 'Marketplace for Alcohol, Clubs, Happy Hours',
-          tag: 'Alcohol App',
-        },
-        {
-          img: 'assets/gypsy-3.png',
-          title: 'Flea',
-          desc: 'Promotions Happening in Streets , Office Buildings Gas Stations etc',
-          tag: 'Promo App',
-        },
-        {
-          img: 'assets/gypsy-4.png',
-          title: 'Mendesliga',
-          desc: 'Marketplace for Sports Tournaments.',
-          tag: 'Tournament App',
-        },
-        {
-          img: 'assets/gypsy-5.png',
-          title: 'Cake Run',
-          desc: 'Marketplace for all Types of Cakes.',
-          tag: 'On the Run App',
-        },
-        {
-          img: 'assets/gypsy-6.png',
-          title: 'Cafino',
-          desc: 'Maketplace for Cafes around you.',
-          tag: 'Cafe App',
-        },
-        {
-          img: 'assets/gypsy-7.jpg',
-          title: '4 Walls',
-          desc: 'Marketplace for Housing',
-          tag: 'Housing App',
-        },
-        {
-          img: 'assets/gypsy-8.jpg',
-          title: 'Staycasey',
-          desc: 'Marketplace for Staycation',
-          tag: 'Staycation App',
-        },
-        {
-          img: 'assets/gypsy-9.jpg',
-          title: 'Astalavista',
-          desc: 'Marketplace for Overseas Travel',
-          tag: 'Travel App',
-        },
-        {
-          img: 'assets/gypsy-10.jpg',
-          title: 'i-Study',
-          desc: 'Marketplace for Study Overseas',
-          tag: 'Overseas Study App',
-        },
-        {
-          img: 'assets/gypsy-11.jpg',
-          title: 'Mart-In',
-          desc: 'Marketplace for Mini Mart',
-          tag: 'Mini Mart App',
-        },
-        {
-          img: 'assets/gypsy-12.jpg',
-          title: 'Biryani-Run',
-          desc: 'Marketplace for Biryani',
-          tag: 'On the Run App',
-        },
-        {
-          img: 'assets/gypsy-13.jpg',
-          title: 'i-Hired',
-          desc: 'Marketplace for Jobs',
-          tag: 'Job App',
-        },
-        {
-          img: 'assets/gypsy-14.jpg',
-          title: 'Pizza Run',
-          desc: 'Marketplace for Pizza',
-          tag: 'On the Run App',
-        },
-        {
-          img: 'assets/gypsy-15.jpg',
-          title: 'Listings',
-          desc: 'Marketplace for Listings',
-          tag: 'Listing App',
-        },
-      ],
+      trendingCard: [],
 
       selectedType: 0,
       activeIndex: 1,
@@ -348,31 +257,30 @@ export default {
     };
   },
   computed: {
+    ...mapState(['itemSelected', 'ativeTag']),
     isSmall() {
       return this.screenWidth < 640;
     },
     isHome() {
       return this.$route.path === '/';
     },
-    ...mapState(['activeTag']),
-    trendingBtn() {
-      return [
-        { title: 'Sausages', tag: 'Sausages' },
-        { title: 'Pickles', tag: 'Pickles' },
-        { title: 'Cashew Nuts', tag: 'Cashew Nuts' },
-        { title: 'Masala', tag: 'Masala' },
-        { title: 'Vinegar', tag: 'Vinegar' },
-        { title: 'Dried Fish', tag: 'Dried Fish' },
-      ];
-    },
   },
   created() {
     window.addEventListener('resize', this.handleResize);
   },
+  mounted() {
+    this.getLogo();
+    this.getCountry();
+    this.getAppDetails2();
+  },
+
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    changeItemSelected(item) {
+      this.$store.commit('setItemSelected', item);
+    },
     ...mapMutations(['setActiveTag']),
     selectTag(tag) {
       this.setActiveTag(tag); // Menetapkan tag yang dipilih sebagai tag aktif
@@ -387,6 +295,81 @@ export default {
     //   app.config.globalProperties.$eventBus.$emit("filter-card-header", tag);
     //   // eventBus.emit("filter-card-header", tag);
     // },
+    getAppDetails2() {
+      // this.isLoading = true;
+      axios
+        .get(`/categories/active-website/app/${this.$appId}`)
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+
+          this.trendingCard = data.map((item, index) => {
+            return {
+              id: index + 1,
+              img: this.$fileURL + item.image || '',
+              desc: item.description || '',
+              title: item.category_name || '',
+              path: item.slug || '',
+            };
+          });
+          this.trendingBtn = data.map((item) => {
+            return {
+              title: item.category_name || '',
+              tag: item.category_name || '',
+            };
+          });
+          // this.appDetails = data.map((item) => {
+          //   return {
+          //     ...item,
+          //     categoryId: item.category_id || 0,
+          //     categoryName: item.category_name || '',
+          //     description: item.description || '',
+          //     image: item.image || '',
+          //     slug: item.slug || '',
+          //   };
+          // })[0];
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        });
+      // .finally(() => {
+      //   this.isLoading = false;
+      // });
+    },
+
+    getLogo() {
+      axios
+        .get(`/app/logo/${this.$appId}`)
+        .then((response) => {
+          const data = response.data.data;
+          // console.log(data);
+          this.logo = data;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        });
+    },
+    getCountry() {
+      axios
+        .get(`/country`)
+        .then((response) => {
+          const data = response.data.data;
+          // console.log(data);
+          this.country = data.map((country) => {
+            return {
+              id: country.country_id,
+              title: country.country_name,
+              path: '#',
+            };
+          });
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        });
+    },
     countCards(tag) {
       const count = this.trendingCard.filter(
         (trend) => trend.tag === tag
