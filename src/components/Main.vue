@@ -110,7 +110,7 @@
           :categories="productMiniatures?.category_list"
         />
       </template>
-      <v-row class="mt-8">
+      <!-- <v-row class="mt-8">
         <v-col cols="12">
           <p class="font-weight-black text-h5">
             <span class="text-orange">Premium Booze </span>
@@ -128,8 +128,8 @@
       </template>
       <HappyHour />
       <SelectCountry />
-      <!-- <OurBrands /> -->
-      <Partners />
+      <OurBrands />
+      <Partners /> -->
     </div>
     <Footer />
   </div>
@@ -234,12 +234,13 @@ const getProductCategoryListData = async (cityId = 1) => {
   isLoading.value = true;
   try {
     const response = await axios.get(
-      `/categories-with-products/app/${appId}/${cityId}`,
+      `/categories-with-products/app/${3}/${cityId}`,
     );
     const data = response.data.data;
 
     productCategories.value = data
-      .sort((a, b) => a.category_id - b.category_id)
+      .filter((item) => item.category_id == 100)
+      // .sort((a, b) => a.category_id - b.category_id)
       .map((category) => ({
         category_id: category.category_id,
         category_name: category.category_name,
