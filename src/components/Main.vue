@@ -6,7 +6,7 @@
   >
     <!-- Background image -->
     <v-img
-      :src="boozardsBackground"
+      :src="fileURL + appDetails?.app_main_image"
       :class="['zoom-effect', { zoomed: isZoomed }]"
       class="hero-background"
       cover
@@ -137,7 +137,7 @@
 
 <script setup>
 import { ref, onMounted, watch } from "vue"; // Ensure these are imported
-import { appId } from "../main";
+import { appId, fileURL } from "../main";
 import { eventBus } from "@/util/bus";
 import axios from "@/util/axios";
 import AOS from "aos";
@@ -157,6 +157,7 @@ const productGift = ref(null);
 const productLimited = ref(null);
 const productSpecial = ref(null);
 const productMiniatures = ref(null);
+const appDetails = ref(null);
 const isLoading = ref(true);
 
 const props = defineProps({
@@ -183,6 +184,24 @@ const handleIntersection = (entries, observer) => {
     }
   });
 };
+
+function getAppDetails() {
+  isLoading.value = true;
+  axios
+    .get(`/app/details/${appId}`)
+    .then((response) => {
+      const data = response.data.data;
+      // console.log(data);
+      appDetails.value = data[0];
+    })
+    .catch((error) => {
+      // eslint-disable-next-line
+      console.log(error);
+    })
+    .finally(() => {
+      isLoading.value = false;
+    });
+}
 
 function get4WallsPropertyData() {
   isLoading.value = true;
@@ -234,13 +253,13 @@ const getProductCategoryListData = async (cityId = 1) => {
   isLoading.value = true;
   try {
     const response = await axios.get(
-      `/categories-with-products/app/${3}/${cityId}`,
+      `/categories-with-products/app/${appId}/${cityId}`,
     );
     const data = response.data.data;
 
     productCategories.value = data
-      .filter((item) => item.category_id == 100)
-      // .sort((a, b) => a.category_id - b.category_id)
+      //.filter((item) => item.category_id == 100)
+      .sort((a, b) => a.category_id - b.category_id)
       .map((category) => ({
         category_id: category.category_id,
         category_name: category.category_name,
@@ -411,6 +430,7 @@ onMounted(() => {
   get4WallsPropertyData();
   getListMainCategories();
   get4WallsPropertyDataCommercial();
+  getAppDetails();
 });
 </script>
 

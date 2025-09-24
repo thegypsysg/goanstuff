@@ -1,5 +1,5 @@
 <template>
-  <router-link to="/">
+  <a href="/">
     <v-img
       :src="$fileURL + logo"
       height="50"
@@ -10,7 +10,7 @@
         <div class="skeleton" />
       </template>
     </v-img>
-  </router-link>
+  </a>
 </template>
 
 <script setup lang="ts">

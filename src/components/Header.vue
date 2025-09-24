@@ -710,7 +710,7 @@ export default {
                       currency_symbol: country.currency_symbol,
                       name: country.city_name,
                       imageUrl: country.city_image,
-                      count: country.product_count,
+                      count: country.dish_count,
                     },
                   ],
                 };
@@ -837,6 +837,7 @@ export default {
 import { useStore } from "vuex";
 import { useCart } from "@/composables/useCart";
 import { watch, computed } from "vue";
+import Logo from "@/components/mainLogo.vue";
 
 // Import images
 import boozardsLogo from "@/assets/images/logo/logo.png";
@@ -897,7 +898,7 @@ watch(() => {
     elevation="1"
     fixed
   >
-    <a href="/">
+    <!-- <a href="/">
       <div class="logo-img-container ml-4">
         <v-img
           class="logo-img"
@@ -911,7 +912,8 @@ watch(() => {
           </template>
         </v-img>
       </div>
-    </a>
+    </a> -->
+    <Logo />
 
     <v-menu v-if="!isProfile && !isMobileProduct">
       <template #activator="{ props }">
