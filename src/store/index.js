@@ -132,7 +132,7 @@ export default (app) =>
         await axios
           .post(
             `/delivery-charges-list-by-country`,
-            { country_id: countryId, app_id: 3 },
+            { country_id: countryId, app_id: 10 },
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,

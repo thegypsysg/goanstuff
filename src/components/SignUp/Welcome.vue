@@ -628,7 +628,8 @@ export default {
       } else {
         axios
           .post(`/gypsy-login/${social_name}`, {
-            app_id: this.appId == "" ? this.$appId : this.appId,
+            // app_id: this.appId == "" ? this.$appId : this.appId,
+            app_id: 10,
           })
           .then((response) => {
             // console.log(response);

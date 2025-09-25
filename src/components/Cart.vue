@@ -361,9 +361,10 @@
                   <span>Where To Deliver . ?</span>
                   <!-- <span class="text-caption text-red">You do not have any Delivery Address in your List .</span> -->
                 </div>
+                <!-- @click="step = 3" -->
                 <v-btn
                   prepend-icon="mdi-arrow-left"
-                  @click="step = 3"
+                  @click="step = 1"
                   color="grey"
                   variant="flat"
                   >Back</v-btn
@@ -825,7 +826,7 @@
                 <div class="px-4 text-caption">
                   <v-row no-gutters class="font-weight-black mt-6">
                     <v-col cols="6"> Delivery to : </v-col>
-                    <v-col cols="6"> Order Instructions </v-col>
+                    <!-- <v-col cols="6"> Order Instructions </v-col> -->
                   </v-row>
                   <v-row no-gutters class="mt-2 font-weight-bold">
                     <v-col cols="6">
@@ -834,12 +835,12 @@
                         v-html="formatInfo(cart[0]?.delivery_address)"
                       />
                     </v-col>
-                    <v-col cols="6">
+                    <!-- <v-col cols="6">
                       <p
                         v-if="cart[0]?.order_instructions"
                         v-html="formatInfo(cart[0]?.order_instructions)"
                       />
-                    </v-col>
+                    </v-col> -->
                   </v-row>
                   <!-- <v-row no-gutters class="font-weight-black mt-6">
                     <v-col cols="6"> Order Status </v-col>
@@ -852,7 +853,7 @@
                     <v-col cols="6"> {{ cart[0]?.order_status_name }} </v-col>
                     <v-col cols="6"> {{ cart[0]?.delivery_status }} </v-col>
                   </v-row> -->
-                  <v-row no-gutters class="font-weight-black mt-6">
+                  <!-- <v-row no-gutters class="font-weight-black mt-6">
                     <v-col cols="6"> Delivery Date </v-col>
                     <v-col cols="6"> Time Slot </v-col>
                   </v-row>
@@ -866,7 +867,7 @@
                       }}
                     </v-col>
                     <v-col cols="6"> {{ cart[0]?.time_slot }} </v-col>
-                  </v-row>
+                  </v-row> -->
                   <!-- <v-row no-gutters class="font-weight-black mt-6">
                     <v-col cols="6"> Payment Status </v-col>
                     <v-col cols="6"> Payment By </v-col>
@@ -972,7 +973,19 @@
               </div>
               <div class="font-weight-bold mb-4">
                 <p>Please Pay Exactly</p>
-                <p class="text-green-darken-1 mt-2">S$ 265.35</p>
+                <p class="text-green-darken-1 mt-2">
+                  {{ selectedCountry.currency_symbol }}
+                  {{
+                    (
+                      subTotal +
+                      selectedDeliveryPrice +
+                      platformFee +
+                      parseFloat(cart[0]?.service_fee) +
+                      ((subTotal + selectedDeliveryPrice + 0.5) * taxAmount) /
+                        100
+                    ).toFixed(2)
+                  }}
+                </p>
               </div>
               <div
                 class="d-flex w-100 align-center justify-space-between mt-10"
@@ -1001,14 +1014,35 @@
         <!-- Fixed Checkout Button -->
         <div class="checkout-container border-t">
           <div class="d-flex align-center justify-center justify-space-between">
-            <v-btn
-              v-if="step == 1"
-              @click="nextStep(2)"
-              color="#ff9800"
-              variant="flat"
-              size="large"
-              >Delivery Options</v-btn
-            >
+            <div v-if="step == 1" class="d-flex align-center ga-4">
+              <v-btn
+                @click="plsPreorder()"
+                variant="outlined"
+                size="md"
+                class="text-caption font-weight-black px-2 py-1"
+              >
+                <v-img height="30" width="30" :src="pickup" />
+                Pick-Up
+              </v-btn>
+              <v-btn
+                @click="plsPreorder()"
+                variant="outlined"
+                size="md"
+                class="text-caption font-weight-black px-2 py-1"
+              >
+                <v-img height="30" width="30" :src="delivery" />
+                Delivery</v-btn
+              >
+              <v-btn
+                @click="nextStep(4)"
+                variant="outlined"
+                size="md"
+                class="text-caption font-weight-black px-2 py-1"
+              >
+                <v-img height="30" width="30" :src="preorder" />
+                Pre-Order</v-btn
+              >
+            </div>
             <v-btn
               v-else-if="step == 2"
               @click="nextStep(3)"
@@ -1099,6 +1133,13 @@
                       </tr>
                       <tr>
                         <td>Delivery Charges</td>
+                        <td>{{ selectedCountry.currency_symbol }}</td>
+                        <td class="text-end">
+                          {{ selectedDeliveryPrice.toFixed(2) }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Discount</td>
                         <td>{{ selectedCountry.currency_symbol }}</td>
                         <td class="text-end">
                           {{ selectedDeliveryPrice.toFixed(2) }}
@@ -1197,7 +1238,8 @@
         <h4 class="mt-4 mb-8 text-center">
           Once Payment is made pls what's app us to 89102000
         </h4>
-        <v-btn class="mb-4 w-100 bg-primary" @click="handlePayLater">
+        <!-- <v-btn class="mb-4 w-100 bg-primary" @click="handlePayLater"> -->
+        <v-btn class="mb-4 w-100 bg-primary" @click="tempConfirm2()">
           OK
         </v-btn>
       </v-card-text>
@@ -1210,7 +1252,8 @@
           Thanks !!! for Payment we will check and update your payment status
           for your current Order
         </h4>
-        <v-btn class="mb-4 w-100 bg-primary" @click="handleHavePaid">
+        <!-- <v-btn class="mb-4 w-100 bg-primary" @click="handleHavePaid"> -->
+        <v-btn class="mb-4 w-100 bg-primary" @click="tempConfirm2()">
           OK
         </v-btn>
       </v-card-text>
@@ -1246,13 +1289,24 @@
       <v-card-text class="">
         <h4 class="mt-4 mb-8 text-center">Confirm this Order . ?</h4>
         <div class="w-100 d-flex align-center justify-space-around">
-          <v-btn class="mb-4 w-33 bg-primary" @click="updateCartOrderStatus()">
+          <!-- <v-btn class="mb-4 w-33 bg-primary" @click="updateCartOrderStatus()"> -->
+          <v-btn class="mb-4 w-33 bg-primary" @click="tempConfirm1()">
             Yes
           </v-btn>
           <v-btn class="mb-4 w-33 bg-primary" @click="confirmOrder2 = false">
             No
           </v-btn>
         </div>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
+  <v-dialog v-model="isPreorder" persistent width="auto">
+    <v-card width="350">
+      <v-card-text class="">
+        <h4 class="mt-4 mb-8 text-center">Only Pre-Order</h4>
+        <v-btn class="mb-4 w-100 bg-primary" @click="isPreorder = false">
+          OK
+        </v-btn>
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -1296,6 +1350,9 @@ import { useCart } from "@/composables/useCart";
 import { useGlobalSnackbar } from "@/composables/useGlobalSnackbar";
 import { fileURL } from "@/main";
 import qris from "@/assets/images/payment/qris-example.png";
+import pickup from "@/assets/images/logo/pick-up.png";
+import delivery from "@/assets/images/logo/delivery.png";
+import preorder from "@/assets/images/logo/preorder.png";
 
 const { snackbarVisible, snackbarMessage, snackbarColor } = useGlobalSnackbar();
 const { updateQuantity } = useCart();
@@ -1335,6 +1392,7 @@ const message = ref({
 });
 const addressDialog = ref(false);
 const summaryDialog = ref(false);
+const isPreorder = ref(false);
 const selectedDelivery = ref(
   // store.state.selectedDelivery ??
   //   (localStorage.getItem("selectedDelivery") !== null
@@ -1791,6 +1849,11 @@ const handleHavePaid = async () => {
   }
 };
 
+const tempConfirm2 = () => {
+  emit("update:viewCart", false);
+  getCartData();
+};
+
 const handleAcceptCash = async () => {
   acceptCash.value = false;
   orderConfirmed.value = true;
@@ -1935,6 +1998,12 @@ const updateCartOrderStatus = async () => {
       color: "error",
     };
   }
+};
+
+const tempConfirm1 = () => {
+  confirmOrder2.value = false;
+  nextStep(6);
+  getCartData();
 };
 
 const nextStep = (value) => {
@@ -2282,6 +2351,10 @@ const getPaymentTypes = async () => {
     console.error("Error fetching addresses:", error);
     // alert(error.response?.data?.message || "Something went wrong!");
   }
+};
+
+const plsPreorder = () => {
+  isPreorder.value = true;
 };
 
 watch(selectedCountry, async () => {

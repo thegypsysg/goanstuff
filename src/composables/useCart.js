@@ -131,7 +131,7 @@ export function useCart() {
     }
 
     const cartMasterData = {
-      app_id: 3,
+      app_id: 10,
       country_id: selectedCountry.value ? selectedCountry.value.country_id : 1,
       city_id: selectedCountry.value ? selectedCountry.value.city_id : 1,
       platform_fee: platformFee.value,

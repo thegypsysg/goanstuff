@@ -42,7 +42,7 @@
                   }"
                 >
                   <span class="text-orange">Welcome !!!</span><br />
-                  <span class="text-white">What's your brand ?</span>
+                  <span class="text-white">Craving Goan food ?</span>
                 </h1>
 
                 <v-btn
