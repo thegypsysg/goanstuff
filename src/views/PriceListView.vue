@@ -1,4 +1,5 @@
 <script>
+import { mapState } from "vuex";
 import axios from "@/util/axios";
 import { appId } from "@/main";
 import cartMixin from "@/mixins/cartMixin";
@@ -18,6 +19,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(["selectedCountry"]),
     isSmall() {
       return this.screenWidth < 640;
     },
@@ -52,6 +54,13 @@ export default {
       // );
     },
   },
+  watch: {
+    selectedCountry(newVal, oldVal) {
+      if (newVal.city_id !== oldVal.city_id) {
+        this.getProductCategoryListData(newVal.city_id);
+      }
+    },
+  },
   created() {
     window.addEventListener("resize", this.handleResize);
   },
@@ -66,11 +75,11 @@ export default {
     handleResize() {
       this.screenWidth = window.innerWidth;
     },
-    async getProductCategoryListData() {
+    async getProductCategoryListData(cityId = 1) {
       this.isLoading = true;
       try {
         const response = await axios.get(
-          `/categories-with-products/app/${appId}`,
+          `/categories-with-products/app/${appId}/${cityId}`,
         );
         const data = response.data.data;
 

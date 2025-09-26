@@ -49,6 +49,8 @@ const userName = computed(() => {
   return store.state.userName;
 });
 
+const selectedCountry = computed(() => store.state.selectedCountry);
+
 const splideOptions = computed(() => ({
   type: "slide",
   perPage: isMobile.value ? 1.3 : 3.5,
@@ -491,7 +493,8 @@ onUnmounted(() => {
                   class="d-flex justify-space-between align-center"
                 >
                   <span class="text-red-darken-1 font-weight-bold">
-                    S$ {{ menu?.selectedPrice.value }}
+                    {{ selectedCountry.currency_symbol }}
+                    {{ menu?.selectedPrice.value }}
                   </span>
                   <span>
                     <v-btn

@@ -422,7 +422,7 @@ export default (app) =>
       },
 
       async getCityMall({ commit, dispatch, state }) {
-        let link = `/app-city-list/${app.config.globalProperties.$appId}`;
+        let link = `/app-city-list/10`;
 
         try {
           const { data } = await axios.get(link);

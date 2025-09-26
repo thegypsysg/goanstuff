@@ -122,9 +122,9 @@
                     </div>
                     <div class="text-body-2">
                       <strong class="text-red">{{
-                        selectedCountry?.currency_symbol
+                        selectedCountry?.currency_symbol + " "
                       }}</strong>
-                      <strong class="text-red">{{ product.price }}</strong>
+                      <strong class="text-red"> {{ product.price }}</strong>
                     </div>
                     <div>
                       <v-btn
@@ -713,9 +713,9 @@
                       </div>
                       <div class="text-body-2">
                         <strong class="text-red">{{
-                          selectedCountry?.currency_symbol
+                          selectedCountry?.currency_symbol + " "
                         }}</strong>
-                        <strong class="text-red">S{{ product.price }}</strong>
+                        <strong class="text-red">{{ product.price }}</strong>
                       </div>
                       <div>
                         <v-btn
@@ -768,6 +768,15 @@
                     </tr>
                     <tr>
                       <td colspan="2">Delivery Charges</td>
+                      <td colspan="2" class="text-end">
+                        {{ selectedCountry.currency_symbol }}
+                      </td>
+                      <td colspan="2" class="text-end">
+                        {{ selectedDeliveryPrice.toFixed(2) }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="2">Discount</td>
                       <td colspan="2" class="text-end">
                         {{ selectedCountry.currency_symbol }}
                       </td>
@@ -1850,6 +1859,8 @@ const handleHavePaid = async () => {
 };
 
 const tempConfirm2 = () => {
+  payLater.value = false;
+  havePaid.value = false;
   emit("update:viewCart", false);
   getCartData();
 };

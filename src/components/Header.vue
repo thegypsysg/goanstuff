@@ -151,6 +151,7 @@ export default {
     },
     selectedCountry() {
       this.getTaxAmount();
+      this.getProductCategoryListData(this.selectedCountry.city_id);
     },
   },
   computed: {
@@ -311,7 +312,7 @@ export default {
     this.getTrendingCardData();
     this.getLocationDropDownData();
 
-    this.getProductCategoryListData();
+    // this.getProductCategoryListData();
 
     app.config.globalProperties.$eventBus.$on(
       "changeHeaderPath",
@@ -762,11 +763,11 @@ export default {
       this.$router.push(`/merchant-id/${item?.merchant_id}`);
       localStorage.setItem("merchantDetailData", JSON.stringify(item));
     },
-    async getProductCategoryListData() {
+    async getProductCategoryListData(cityId = 1) {
       this.isLoading = true;
       try {
         const response = await axios.get(
-          `/categories-with-products/app/${appId}`,
+          `/categories-with-products/app/${appId}/${cityId}`,
         );
         const data = response.data.data;
         this.setCategoryData(data);
@@ -978,11 +979,10 @@ watch(() => {
               </template>
               <v-list-item-title
                 >{{ city.name }}
-                <span class="font-weight-bold"
+                <!-- <span class="font-weight-bold"
                   >(<span class="text-blue-darken-4">{{ city.count }}</span>
-                  Products)</span
-                ></v-list-item-title
-              >
+                  Products)</span> -->
+              </v-list-item-title>
             </v-list-item>
           </template>
         </v-list>
