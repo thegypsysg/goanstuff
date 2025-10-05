@@ -321,7 +321,7 @@ onUnmounted(() => {
         <span class="ml-4 ml-md-0 text-h6 font-weight-bold">{{
           props.title
         }}</span>
-        <v-select
+        <!-- <v-select
           style="min-width: 200px"
           variant="outlined"
           v-model="selected"
@@ -334,7 +334,6 @@ onUnmounted(() => {
           return-object
           placeholder="Country of origin"
         >
-          <!-- Tampilan ketika dipilih -->
           <template #selection="{ props, item }">
             <div
               v-bind="props"
@@ -357,7 +356,6 @@ onUnmounted(() => {
             </div>
           </template>
 
-          <!-- Tampilan item di dropdown -->
           <template #item="{ props, item }">
             <div v-bind="props" class="px-2 py-1">
               <div
@@ -380,7 +378,7 @@ onUnmounted(() => {
               </div>
             </div>
           </template>
-        </v-select>
+        </v-select> -->
       </div>
       <v-btn
         class="text-capitalize font-weight-bold"

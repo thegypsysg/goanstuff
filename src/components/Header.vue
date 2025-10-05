@@ -27,6 +27,7 @@ export default {
       platformFee: null,
       taxAmount: null,
       isBestViewed: false,
+      isNotEmptyCart: false,
       isQRCode: false,
       viewCart: false,
       isApply: false,
@@ -78,10 +79,10 @@ export default {
       dialog2: false,
       activeMalls: [],
       selectedLocation: {
-        country_id: 1,
-        currency_symbol: "S$",
-        country: "Singapore",
-        city: "Singapore City",
+        country_id: 2,
+        currency_symbol: "Rs",
+        country: "India",
+        city: "All Indian Cities",
       },
       locationDropdown: [
         // {
@@ -227,6 +228,9 @@ export default {
     },
     authToken() {
       return localStorage.getItem("token");
+    },
+    countryDevice() {
+      return localStorage.getItem("countryDevice");
     },
     isPrivacy() {
       return this.$route.path == "/privacy-policy";
@@ -716,9 +720,36 @@ export default {
                   ],
                 };
               });
-              const defaultCountry = this.locationDropdown[0];
-              const defaultCity = defaultCountry.cities[0];
-              this.selectLocation(defaultCountry, defaultCity);
+              // console.log("country: ", this.countryDevice);
+              let defaultCountry = null;
+              let defaultCity = null;
+
+              if (this.countryDevice) {
+                defaultCountry = this.locationDropdown.find(
+                  (c) =>
+                    c.country.toLowerCase() ===
+                    this.countryDevice.toLowerCase(),
+                );
+                if (defaultCountry) {
+                  defaultCity = defaultCountry.cities[0];
+                } else {
+                  defaultCountry = this.locationDropdown.find(
+                    (c) => c.country.toLowerCase() === "india",
+                  );
+                  if (defaultCountry) {
+                    defaultCity = defaultCountry.cities[0];
+                  }
+                }
+                this.selectLocation(defaultCountry, defaultCity);
+              } else {
+                defaultCountry = this.locationDropdown.find(
+                  (c) => c.country.toLowerCase() === "india",
+                );
+                if (defaultCountry) {
+                  defaultCity = defaultCountry.cities[0];
+                }
+                this.selectLocation(defaultCountry, defaultCity);
+              }
               // console.log("country: ", this.locationDropdown);
             })
             .catch((error) => {
@@ -738,10 +769,9 @@ export default {
       this.screenWidth = window.innerWidth;
     },
     selectLocation(country, city) {
-      // console.log(country.currency_symbol);
       this.selectedLocation = {
         ...city,
-        currency_symbol: country.currency_symbol ?? "S$",
+        currency_symbol: country.currency_symbol ?? "Rs",
         country_id: country.country_id,
         country: country.country,
         city: city.name,
@@ -752,6 +782,28 @@ export default {
         this.selectedLocation.country_id,
       );
       // console.log("selected: ", this.selectedLocation);
+    },
+    selectLocation2(country, city) {
+      if (city?.city_id != this.selectedLocation?.city_id) {
+        if (this.$store.state.cart.length > 0) {
+          this.isNotEmptyCart = true;
+          return false;
+        } else {
+          this.selectedLocation = {
+            ...city,
+            currency_symbol: country.currency_symbol ?? "Rs",
+            country_id: country.country_id,
+            country: country.country,
+            city: city.name,
+          };
+          this.setSelectedCountry(this.selectedLocation);
+          this.$store.dispatch(
+            "getDeliveryCharges",
+            this.selectedLocation.country_id,
+          );
+          // console.log("selected: ", this.selectedLocation);
+        }
+      }
     },
     gotoMallDetail(item) {
       this.dialog2 = false;
@@ -969,7 +1021,7 @@ watch(() => {
               :active="selectedLocation.city === city.name"
               variant="text"
               active-color="primary"
-              @click="selectLocation(location, city)"
+              @click="selectLocation2(location, city)"
               class="pl-7"
             >
               <template #prepend>
@@ -1493,7 +1545,7 @@ watch(() => {
                     :active="selectedLocation.city === city.name"
                     variant="text"
                     active-color="primary"
-                    @click="selectLocation(location, city)"
+                    @click="selectLocation2(location, city)"
                     class="pl-7"
                   >
                     <template #prepend>
@@ -2244,6 +2296,19 @@ watch(() => {
       <v-card-text class="">
         <h4 class="mt-4 mb-8 text-center">Best Viewed on Mobile</h4>
         <v-btn class="mb-4 w-100 bg-primary" @click="isBestViewed = false">
+          OK
+        </v-btn>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
+
+  <v-dialog v-model="isNotEmptyCart" persistent width="auto">
+    <v-card width="350">
+      <v-card-text class="">
+        <h4 class="mt-4 mb-8 text-center">
+          Please delete existing cart items to move to other city prices
+        </h4>
+        <v-btn class="mb-4 w-100 bg-primary" @click="isNotEmptyCart = false">
           OK
         </v-btn>
       </v-card-text>

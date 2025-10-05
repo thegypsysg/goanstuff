@@ -41,6 +41,7 @@ export default {
       otherPromotionDataFinal: [],
       mallMerchants: [],
       mallPromotions: [],
+      screenWidth: window.innerWidth,
     };
   },
   computed: {
@@ -59,6 +60,9 @@ export default {
     isSmall() {
       return this.screenWidth < 640;
     },
+  },
+  created() {
+    window.addEventListener("resize", this.handleResize);
   },
   mounted() {
     // this.getCountryMall();
@@ -80,12 +84,19 @@ export default {
       this.getActiveDataByCountryCity,
     );
   },
+
+  unmounted() {
+    window.removeEventListener("resize", this.handleResize);
+  },
   methods: {
     ...mapMutations([
       "setItemSelected",
       "setItemSelectedComplete",
       "setAppDetails",
     ]),
+    handleResize() {
+      this.screenWidth = window.innerWidth;
+    },
     getCountryMall() {
       this.isLoading = true;
       axios

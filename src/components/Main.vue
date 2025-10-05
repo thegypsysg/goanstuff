@@ -49,8 +49,9 @@
                   color="orange"
                   size="large"
                   class="text-uppercase text-white mt-4"
-                  to="/price-list"
+                  @click.prevent="scrollToSection2('ourBooze')"
                 >
+                  <!-- to="/price-list" -->
                   View Price List
                 </v-btn>
               </v-col>
@@ -169,6 +170,26 @@ const props = defineProps({
 
 function scrollToSection() {
   eventBus.scrollToSection = "happeningTarget"; // Ganti dengan ID section yang diinginkan
+}
+
+function scrollToSection2(sectionId) {
+  const cardSection = document.getElementById(sectionId);
+
+  // this.$nextTick(() => {
+  if (cardSection) {
+    const cardRect = cardSection.getBoundingClientRect();
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const offset = props.isSmall
+      ? cardRect.top + scrollTop - 250
+      : cardRect.top + scrollTop - 70; // Nilai offset yang diinginkan, dalam piksel
+
+    window.scrollTo({
+      top: offset,
+      behavior: "smooth",
+    });
+  }
+  // });
+  // window.scrollBy(0, -scrollOffset);
 }
 
 const selectedCountry = computed(() => store.state.selectedCountry);

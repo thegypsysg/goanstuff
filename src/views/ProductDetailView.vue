@@ -116,6 +116,7 @@ onUnmounted(() => {
                   selectedRange?.quantity.quantity_name
                 }}</span>
               </h2>
+              <p>{{ product?.additional_description || "" }}</p>
               <v-row no-gutters class="mb-3">
                 <v-col cols="12" md="8">
                   <v-row>
@@ -126,18 +127,18 @@ onUnmounted(() => {
                       class="text-blue"
                       ><h2>S$ {{ selectedRange?.price_list?.rate }}</h2></v-col
                     >
-                    <v-col cols="6"><strong>Alcohol Percentage</strong></v-col>
+                    <!-- <v-col cols="6"><strong>Alcohol Percentage</strong></v-col>
                     <v-col cols="1" class="text-center">:</v-col>
                     <v-col cols="5" class="text-right"
                       >{{ product?.percentage || "" }}%</v-col
-                    >
+                    > -->
                   </v-row>
                 </v-col>
               </v-row>
               <v-row no-gutters class="mb-3">
                 <v-col cols="12" md="8">
                   <v-row>
-                    <v-col cols="6"><strong>Bottle Volume</strong></v-col>
+                    <v-col cols="6"><strong>Weight</strong></v-col>
                     <v-col cols="1" class="text-center">:</v-col>
                     <v-col cols="5" class="text-right">{{
                       selectedRange?.quantity.quantity_name
