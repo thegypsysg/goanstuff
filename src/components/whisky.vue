@@ -401,7 +401,7 @@ onUnmounted(() => {
       </v-btn>
       <transition-group name="card-transition" mode="out-in">
         <Splide ref="splideRef" :options="splideOptions">
-          <SplideSlide v-for="menu in filteredProducts" :key="menu.product_id">
+          <SplideSlide v-for="menu in filteredProducts" :key="menu?.product_id">
             <!-- :key="menu?.product_id" -->
             <p class="text-grey-darken-1 pl-4 text-caption font-weight-black">
               View: {{ menu?.selectedPrice2.value?.views || 0 }}

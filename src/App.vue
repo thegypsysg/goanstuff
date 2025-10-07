@@ -34,7 +34,7 @@
         :isBatamProperties="isBatamProperties"
         :is-signin="isSignIn"
       />
-      <RouterView v-slot="{ Component }">
+      <RouterView :key="$route.fullPath" v-slot="{ Component }">
         <Transition name="page-opacity" mode="out-in">
           <component :is="Component" />
         </Transition>

@@ -1043,7 +1043,7 @@
                 Delivery</v-btn
               >
               <v-btn
-                @click="nextStep(4)"
+                @click="preOrder()"
                 variant="outlined"
                 size="md"
                 class="text-caption font-weight-black px-2 py-1"
@@ -1976,6 +1976,41 @@ const whereToDeliver = async () => {
   }
 };
 
+const preOrder = async () => {
+  try {
+    const response = await axios.put(
+      `/update-cart-order-type`,
+      {
+        cart_id: cart.value[0].cart_id,
+        order_type: "O",
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      },
+    );
+    // const data = response.data.data;
+    // console.log(data);
+    nextStep(4);
+    getCartData();
+    snackbar.value = true;
+    message.value = {
+      text: response.data.message,
+      color: "success",
+    };
+  } catch (error) {
+    console.log(error);
+    const errorMessage =
+      error.response?.data?.message || "Something went wrong!";
+    snackbar.value = true;
+    message.value = {
+      text: errorMessage,
+      color: "error",
+    };
+  }
+};
+
 const updateCartOrderStatus = async () => {
   try {
     const response = await axios.put(
@@ -2445,11 +2480,22 @@ onMounted(() => {
     // getPaymentTypes();
     getTimeSlots();
     getPlatformFee();
-    getCartData();
+    // getCartData();
   }
 
   updateTime();
   setInterval(updateTime, 1000);
+});
+
+watch(selectedCountry, (newX) => {
+  if (
+    authToken &&
+    authToken != null &&
+    authToken != "" &&
+    authToken != "null"
+  ) {
+    getCartData();
+  }
 });
 </script>
 

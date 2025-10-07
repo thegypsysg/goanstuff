@@ -923,6 +923,8 @@ const token = computed(() => {
   return localStorage.getItem("token");
 });
 
+const selectedCountry = computed(() => store.state.selectedCountry);
+
 const getDeliveryCharges = () => {
   store.dispatch("getDeliveryCharges", 1);
 };
@@ -936,7 +938,7 @@ const addToCartData = (data, range) => {
   }
 };
 
-watch(() => {
+watch(selectedCountry, (newX) => {
   getDeliveryCharges();
 });
 </script>
@@ -1491,7 +1493,7 @@ watch(() => {
 
     <template v-if="!isProfile" #extension>
       <div class="mobile__app text-center w-100">
-        <template v-if="activeLocationButton && isSmall">
+        <template v-if="isSmall">
           <v-menu v-if="locationPlaceholder" v-model="userLocation">
             <template v-slot:activator="{ props }">
               <v-btn
@@ -2173,7 +2175,7 @@ watch(() => {
             class="d-flex justify-center mt-1"
             :class="{ 'mb-2': userName == null }"
           >
-            <v-col cols="3" class="d-flex justify-end">
+            <!-- <v-col cols="3" class="d-flex justify-end">
               <a :href="contactData?.facebook">
                 <v-img :src="images.facebook" height="40" width="32" />
               </a>
@@ -2192,7 +2194,7 @@ watch(() => {
                   width="35"
                 />
               </a>
-            </v-col>
+            </v-col> -->
             <v-col
               class="d-flex justify-center flex-column align-center"
               cols="12"

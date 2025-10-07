@@ -23,6 +23,7 @@ const isSmall = computed(() => screenWidth.value < 640);
 const token = computed(() => {
   return localStorage.getItem("token");
 });
+const selectedCountry = computed(() => store.state.selectedCountry);
 
 const getProductDetails = async () => {
   try {
@@ -117,6 +118,9 @@ onUnmounted(() => {
                 }}</span>
               </h2>
               <p>{{ product?.additional_description || "" }}</p>
+              <h3 class="text-purple-darken-1 mt-4">
+                {{ product?.ranges[0]?.description || "" }}
+              </h3>
               <v-row no-gutters class="mb-3">
                 <v-col cols="12" md="8">
                   <v-row>
@@ -125,7 +129,10 @@ onUnmounted(() => {
                       v-if="selectedRange?.price_list?.rate"
                       cols="12"
                       class="text-blue"
-                      ><h2>S$ {{ selectedRange?.price_list?.rate }}</h2></v-col
+                      ><h2>
+                        {{ selectedCountry.currency_symbol }}
+                        {{ selectedRange?.price_list?.rate }}
+                      </h2></v-col
                     >
                     <!-- <v-col cols="6"><strong>Alcohol Percentage</strong></v-col>
                     <v-col cols="1" class="text-center">:</v-col>
@@ -135,7 +142,7 @@ onUnmounted(() => {
                   </v-row>
                 </v-col>
               </v-row>
-              <v-row no-gutters class="mb-3">
+              <!-- <v-row no-gutters class="mb-3">
                 <v-col cols="12" md="8">
                   <v-row>
                     <v-col cols="6"><strong>Weight</strong></v-col>
@@ -156,7 +163,7 @@ onUnmounted(() => {
                     }}</v-col>
                   </v-row>
                 </v-col>
-              </v-row>
+              </v-row> -->
 
               <span class="pt-2" v-if="selectedRange != null">
                 <v-btn
@@ -216,14 +223,14 @@ onUnmounted(() => {
               </div> -->
             </v-col>
           </v-row>
-          <v-row v-if="product?.additional_description">
+          <!-- <v-row v-if="product?.additional_description">
             <v-col lg="6" md="8" sm="12">
               <h2 class="mt-1">Description</h2>
               <div class="mt-3 text-justify">
                 {{ product?.additional_description }}
               </div>
             </v-col>
-          </v-row>
+          </v-row> -->
         </v-col>
       </v-row>
     </v-container>
